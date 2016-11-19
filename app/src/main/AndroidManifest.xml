@@ -15,6 +15,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:name=".BandService"
+                 android:process=".shenjianli.binder">
+            <intent-filter>
+                <action android:name="com.shenjianli.aidl.bank.BankServices"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
