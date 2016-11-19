@@ -5,7 +5,7 @@ import java.util.UUID;
 /**
  * Created by shenjianli on 16/11/18.
  */
-public class BankBinder extends IBankAIDL.Stub {
+public class BankBinder extends IBankAIDL.Stub implements IBank{
     @Override
     public String openAccount(String name, String password) {
         return name + "开户成功！账号为：" + UUID.randomUUID().toString();

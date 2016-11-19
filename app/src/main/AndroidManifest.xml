@@ -16,7 +16,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".BandService"
+        <service android:name=".BankService"
                  android:process=".shenjianli.binder">
             <intent-filter>
                 <action android:name="com.shenjianli.aidl.bank.BankServices"/>

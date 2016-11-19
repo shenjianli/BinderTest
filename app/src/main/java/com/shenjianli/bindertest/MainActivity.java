@@ -37,7 +37,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        bindService(new Intent("com.shenjianli.aidl.bank.BankService"),conn,BIND_AUTO_CREATE);
+        Intent intent = new Intent(this,BankService.class);
+        intent.setAction("com.shenjianli.aidl.bank.BankService");
+        bindService(intent,conn,BIND_AUTO_CREATE);
     }
 
     private ServiceConnection conn = new ServiceConnection() {

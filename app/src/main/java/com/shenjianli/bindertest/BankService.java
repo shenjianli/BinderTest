@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
 /**
  * Created by shenjianli on 16/11/18.
  */
-public class BandService extends Service{
+public class BankService extends Service{
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
