@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     //private BankBinder mBankBinder;
 
+    //Client来保存远程Service端的引用
     private IBankAIDL mBankBinder;
 
     @Override

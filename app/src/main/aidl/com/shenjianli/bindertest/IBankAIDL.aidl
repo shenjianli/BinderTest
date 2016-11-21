@@ -1,8 +1,6 @@
 // IBankAIDL.aidl
 package com.shenjianli.bindertest;
 
-// Declare any non-default types here with import statements
-
 interface IBankAIDL {
 
     String openAccount(String name,String password);
