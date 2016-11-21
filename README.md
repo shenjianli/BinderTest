@@ -2,6 +2,7 @@
 Android中使用Binder进行进程间通信
 
 ## 实例效果：
+![实例效果](img/BinderTest.gif)
 ## 实例结构：
 ![实例结构图](img/structure.png)
 ## 关键代码：
@@ -49,3 +50,7 @@ aidl 可以把aidl文件转化为一个Java类文件，这个文件同时重载�
 
 参考文献：
 [http://blog.csdn.net/huachao1001/article/details/51504469](http://blog.csdn.net/huachao1001/article/details/51504469)
+[http://blog.csdn.net/luoshengyang/article/details/6618363](http://blog.csdn.net/luoshengyang/article/details/6618363)
+[http://blog.csdn.net/luoshengyang/article/details/6642463](http://blog.csdn.net/luoshengyang/article/details/6642463)
+[http://blog.csdn.net/luoshengyang/article/details/6629298](http://blog.csdn.net/luoshengyang/article/details/6629298)
+[http://blog.csdn.net/luoshengyang/article/details/6621566](http://blog.csdn.net/luoshengyang/article/details/6621566)
