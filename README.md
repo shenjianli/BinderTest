@@ -241,9 +241,28 @@ public interface ServiceConnection{
 ```
 当客户端请求Ams启动某个Service后，该Service如果正常启动，那么Ams就会远程调用ActivityThread类中的ApplicationThread对象，调用参数中会包含Service的Binder引用，然后在ApplicationThread中会回调bindService中的conn接口。因此，在客户端中，可以在onServiceConnected()方法中将其参数Service保存为一个全局变量，从而在客户端的任何地方都可以调用该远程服务！
 
+```
+/**
+ * Cast an IBinder object into an com.shenjianli.bindertest.IBankAIDL interface,
+ * generating a proxy if needed.
+ */
+public static com.shenjianli.bindertest.IBankAIDL asInterface(android.os.IBinder obj)
+{
+if ((obj==null)) {
+return null;
+}
+android.os.IInterface iin = obj.queryLocalInterface(DESCRIPTOR);
+if (((iin!=null)&&(iin instanceof com.shenjianli.bindertest.IBankAIDL))) {
+return ((com.shenjianli.bindertest.IBankAIDL)iin);
+}
+return new com.shenjianli.bindertest.IBankAIDL.Stub.Proxy(obj);
+}
+```
+
 **2.客户端和服务端必须事先约定好两件事，服务端函数的参数在包裹中的顺序，服务端不同函数的int标识**
 
 aidl 可以把aidl文件转化为一个Java类文件，这个文件同时重载了onTransact()方法，统一了存入包裹和读取包裹参数
+
 ```
 @Override public boolean onTransact(int code, android.os.Parcel data, android.os.Parcel reply, int flags) throws android.os.RemoteException
 {
