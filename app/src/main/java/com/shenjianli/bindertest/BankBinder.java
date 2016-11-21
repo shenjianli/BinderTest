@@ -4,8 +4,10 @@ import java.util.UUID;
 
 /**
  * Created by shenjianli on 16/11/18.
+ * public class BankBinder extends Binder implements IBank
+ *  利用AIDL生成的类来实现远程Binder并传递参数
  */
-public class BankBinder extends IBankAIDL.Stub implements IBank{
+public class BankBinder extends IBankAIDL.Stub{
     @Override
     public String openAccount(String name, String password) {
         return name + "开户成功！账号为：" + UUID.randomUUID().toString();

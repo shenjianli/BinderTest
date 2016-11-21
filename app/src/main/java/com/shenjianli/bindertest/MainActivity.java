@@ -37,15 +37,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        //Client进行Service绑定
         Intent intent = new Intent(this,BankService.class);
         intent.setAction("com.shenjianli.aidl.bank.BankService");
         bindService(intent,conn,BIND_AUTO_CREATE);
+
     }
 
     private ServiceConnection conn = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder binder) {
             //mBankBinder = (BankBinder) binder;
+            //绑定成功后，获得远程Binder的引用
             mBankBinder = IBankAIDL.Stub.asInterface(binder);
         }
 
@@ -55,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    //点击按钮后，调用另一进行中Binder中的方法获得返回值
     @OnClick({R.id.open_account, R.id.save_money, R.id.get_money, R.id.close_account})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -92,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //进行解绑Service
         unbindService(conn);
     }
 }
