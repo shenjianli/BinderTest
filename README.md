@@ -213,10 +213,16 @@ public class MainActivity extends AppCompatActivity {
 ### Binder原理图
 
 ![BinderClientDirverService](img/binder001.png)
-
+ Binder是一种架构，提供了服务端接口，Binder驱动，客户端接口三个模块。如图所示
 **1.Binder服务端**
 
+一个Binder服务端实际上就是一个Binder类的对象，该对象一旦创建，内部就启动一个隐藏线程。该线程接下来会接收Binder驱动发送的消息，收到消息后，会执行Binder中的onTransact()方法，并护按照该函数的参数执行不同的服务代码。因此，要实现一个Binder服务，就必须重载onTransact()方法。
+ 
+ 可以想象，重载onTransact()主要作用是把onTransact的参数转换为服务函数的参数，而onTransact方法的参数来源是客户端调用transact（）方法的输入，因此，如果transact()有固定的格式的输入，那么onTransact（）就会的固定格式的输出。
+
 **2.Binder驱动**
+
+任意一个服务端Binder对象被创建时，同时会在Binder驱动中创建一个mRemote对象，该对象的类型也是Binder类，客户端要访问远程服务时，都是通过mRemote对象。
 
 重载了transact()方法，主要包括以下内容:
 1.以线程间消息通信的模式，向服务端发送客户端传递过来的参数
@@ -224,15 +230,11 @@ public class MainActivity extends AppCompatActivity {
 3.接收到服务端线程通知，然后继续执行客户端线程，并返回到客户端代码区
 
 **3.应用程序客户端**
+客户端想要访问远程服务，必须获取远程服务在Binder对象对应的mRemote引用，然后调用transact()方法。
 
+从上面看，程序开发人员，客户端似乎是直接调用远程服务对应的Binder,而事实上，则是通过Binder驱动进行中转。即存在两个Binder对象，一个是服务端的Binder对象，另一个则是Binder驱动中的Binder对象，所不同的是Binder驱动中的对象不会再额外产生一个线程。
 
-### Client端调用远程服务的过程
-
-![BinderClientServiceCallProcess](img/Binder_comminication.png)
-
-在Android中，Binder用于完成进程间通信（IPC）,即把多个进程“别”在一起，比如，普通应用程序可以调用音乐播放服务提供的播放，暂停，停止等功能！
-
-### 普通自定义Binder存在问题
+### 手工编写Binder存在问题
 **1.客户端如何获得服务端的Binder对象引用**
 
 ```
@@ -246,8 +248,11 @@ public interface ServiceConnection{
     public void onServiceDisconnected(ComponentName name);	
 }
 ```
-当客户端请求Ams启动某个Service后，该Service如果正常启动，那么Ams就会远程调用ActivityThread类中的ApplicationThread对象，调用参数中会包含Service的Binder引用，然后在ApplicationThread中会回调bindService中的conn接口。因此，在客户端中，可以在onServiceConnected()方法中将其参数Service保存为一个全局变量，从而在客户端的任何地方都可以调用该远程服务！
+当客户端请求Ams启动某个Service后，该Service如果正常启动，那么Ams就会远程调用ActivityThread类中的ApplicationThread对象，调用参数中会包含Service的Binder引用，然后在ApplicationThread中会回调bindService中的conn接口。因此，在客户端中，可以在onServiceConnected()方法中将其参数Service保存为一个全局变量，从而在客户端的任何地方都可以调用该远程服务！如下图所示：
 
+![Binder客户端和服务端的调用过程](img/Binder_comminication.png)
+
+客户端通过AIDL中的asInterface（）方法来获得服务端BankBinder引用
 ```
 /**
  * Cast an IBinder object into an com.shenjianli.bindertest.IBankAIDL interface,
@@ -268,7 +273,7 @@ return new com.shenjianli.bindertest.IBankAIDL.Stub.Proxy(obj);
 
 **2.客户端和服务端必须事先约定好两件事，服务端函数的参数在包裹中的顺序，服务端不同函数的int标识**
 
-aidl 可以把aidl文件转化为一个Java类文件，这个文件同时重载了onTransact()方法，统一了存入包裹和读取包裹参数
+aidl 可以把aidl文件转化为一个Java类文件，这个文件同时重载了onTransact()方法，统一了存入包裹和读取包裹参数，如下代码可以看出自动生成的的文件已经帮助我们解决了参数不一致的问题。
 
 ```
 @Override public boolean onTransact(int code, android.os.Parcel data, android.os.Parcel reply, int flags) throws android.os.RemoteException
