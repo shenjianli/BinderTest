@@ -22,6 +22,7 @@ interface IBankAIDL {
 }
 ```
 经过编译后会在app/build/generated/source/aidl/debug目录下生成IBankAIDL.java文件，如下图所求：
+
 ![aidl生成的java文件](img/aidl_build_java_file.png)
 
 **2.根据生成的IBankAIDL.java来编写BankBinder.java文件**
@@ -84,6 +85,7 @@ public class BankService extends Service{
 
 ```
 上面代码定义好了BankService，并在onBind方法中返回我们上面所实现的Binder类。接下来，我们需要把这个Service放入到另一个进程中。如下图所求进行配置：
+
 ![配置Service在另一进程中](img/put_service_to_other_thread.png)
 
 **4.客户端调用另一进程中方法，得到返回值**
@@ -196,16 +198,20 @@ public class MainActivity extends AppCompatActivity {
 ```
 ## UML图
 **1.实例UML**
+
 ![aild生成文件UML](img/Aidl_binder_uml.png)
 
 图中uml图中蓝色表示我们通常aidl来生成的IBandAIDL.java文件
+
 **2.实例使用的两个进程**
+
 ![实例进程UML](img/binder_two_thead.png)
 
 当实例运行起来后，图中左边几个对象运行于com.shenjianli.bindertest进程；图中右边几个对象运行于.shenjianli.binder进程中；在MainActivity中使用mBandBinder（远程引用）来调用远程进程BankService中BankBinder中的方法来返回处理数据。
 
 ## 知识介绍：
 ### Binder原理图
+
 ![BinderClientDirverService](img/binder001.png)
 
 **1.Binder服务端**
@@ -221,6 +227,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 ### Client端调用远程服务的过程
+
 ![BinderClientServiceCallProcess](img/Binder_comminication.png)
 
 在Android中，Binder用于完成进程间通信（IPC）,即把多个进程“别”在一起，比如，普通应用程序可以调用音乐播放服务提供的播放，暂停，停止等功能！
