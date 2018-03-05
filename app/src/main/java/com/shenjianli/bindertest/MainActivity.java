@@ -52,11 +52,28 @@ public class MainActivity extends AppCompatActivity {
             //mBankBinder = (BankBinder) binder;
             //绑定成功后，获得远程Binder的引用
             mBankBinder = IBankAIDL.Stub.asInterface(binder);
+            try {
+                binder.linkToDeath(deathRecipient,0);
+            } catch (RemoteException e) {
+
+            }
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
 
+        }
+    };
+
+    private IBinder.DeathRecipient   deathRecipient = new IBinder.DeathRecipient() {
+        @Override
+        public void binderDied() {
+            if(mBankBinder == null){
+                return;
+            }
+            mBankBinder.asBinder().unlinkToDeath(deathRecipient,0);
+            mBankBinder = null;
+            //TODO 进行重新绑定
         }
     };
 

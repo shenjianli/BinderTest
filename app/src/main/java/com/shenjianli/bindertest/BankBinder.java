@@ -10,7 +10,8 @@ import java.util.UUID;
 public class BankBinder extends IBankAIDL.Stub{
     @Override
     public String openAccount(String name, String password) {
-        return name + "开户成功！账号为：" + UUID.randomUUID().toString();
+        String name1 = Thread.currentThread().getName();
+        return name + "开户成功！账号为：" + UUID.randomUUID().toString() + "当前线程：" + name1;
     }
 
     @Override
